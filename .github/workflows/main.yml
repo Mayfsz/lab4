@@ -1,0 +1,41 @@
+name: CI/CD Pipeline
+
+on: 
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: "3.10"
+
+    - name: Install Poetry
+      run: |
+        curl -sSL https://install.python-poetry.org | python -
+        
+    - name: Install dependencies with Poetry
+      run: poetry install
+
+    - name: Check code formatting with Black
+      run: poetry run black --check .
+
+    - name: Run unit tests with pytest
+      run: poetry run pytest
+
+    - name: Generate API documentation with pdoc3
+      run: poetry run pdoc --html --output-dir docs .
+
+    - name: Deploy API documentation to gh-pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        personal_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs
