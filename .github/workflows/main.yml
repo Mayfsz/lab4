@@ -37,5 +37,5 @@ jobs:
     - name: Deploy API documentation to gh-pages
       uses: peaceiris/actions-gh-pages@v3
       with:
-        personal_token: ${{ secrets.GITHUB_TOKEN }}
+        personal_token: ${{ secrets.lab4 }}
         publish_dir: ./docs
